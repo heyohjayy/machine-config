@@ -1,3 +1,4 @@
+```bash
 #!/usr/bin/env bash
 
 # =========================================================
@@ -76,11 +77,19 @@ install_package() {
 enable_service() {
     local service="$1"
 
-    log "Starting $service service..."
-    run_command "systemctl start $service"
+    if systemctl is-active --quiet "$service"; then
+        log "$service service is already running."
+    else
+        log "Starting $service service..."
+        run_command "systemctl start $service"
+    fi
 
-    log "Enabling $service service..."
-    run_command "systemctl enable $service"
+    if systemctl is-enabled --quiet "$service"; then
+        log "$service service is already enabled."
+    else
+        log "Enabling $service service..."
+        run_command "systemctl enable $service"
+    fi
 }
 
 # =========================================================
@@ -295,3 +304,5 @@ main() {
 # =========================================================
 
 main
+```
+
